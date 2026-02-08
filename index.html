@@ -3,160 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Для Юлі ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --accent: #ff2d55; /* Фірмовий рожевий Apple */
-            --accent-light: #ff5c8d;
-            --glass: rgba(255, 255, 255, 0.75);
-            --ios-blur: blur(25px);
+            --accent: #ff2d55;
+            --accent-gradient: linear-gradient(135deg, #ff2d55, #ff5c8d);
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --ios-blur: blur(35px);
         }
 
         * {
             -webkit-tap-highlight-color: transparent;
             box-sizing: border-box;
-            user-select: none; /* Забороняємо виділення тексту */
+            user-select: none;
         }
 
         body {
             margin: 0;
-            /* Використовуємо dvh для точної висоти на мобільних */
-            height: 100dvh;
+            height: 100dvh; /* Використовуємо dvh для точної висоти на iOS */
             display: flex;
             justify-content: center;
             align-items: center;
             padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
-            background: linear-gradient(135deg, #fff0f3, #ffd6e0, #c4faf8);
-            background-size: 400% 400%;
-            animation: gradientBG 20s ease infinite;
+            background-color: #fff0f3;
             font-family: 'Inter', -apple-system, sans-serif;
             overflow: hidden;
             position: relative;
         }
 
-        /* ДОДАНО: Текстура шуму для глибини */
-        body::before {
-            content: "";
+        /* --- НОВИЙ ЖИВИЙ ФОН (Mesh Gradient Blobs) --- */
+        .background-blobs {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
-            pointer-events: none;
             z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.7;
+            animation: moveBlob 20s infinite alternate ease-in-out;
+            border-radius: 50%;
         }
 
-        /* Головна картка */
+        .blob-1 {
+            top: -10%; left: -10%; width: 70%; height: 70%;
+            background: #ffdee9;
+            animation-duration: 25s;
+        }
+        .blob-2 {
+            bottom: -20%; right: -20%; width: 80%; height: 80%;
+            background: #c4faf8;
+            animation-duration: 30s;
+            animation-direction: alternate-reverse;
+        }
+        .blob-3 {
+            bottom: 30%; left: 20%; width: 50%; height: 50%;
+            background: #ffd6e0;
+            animation-duration: 22s;
+        }
+
+        @keyframes moveBlob {
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            100% { transform: translate(100px, 50px) rotate(20deg) scale(1.1); }
+        }
+        /* ----------------------------------------- */
+
+
+        /* Головна картка з ефектом супер-скла */
         .card {
             position: relative;
             z-index: 10;
             width: 100%;
             max-width: 360px;
-            background: var(--glass);
+            background: var(--glass-bg);
             -webkit-backdrop-filter: var(--ios-blur);
             backdrop-filter: var(--ios-blur);
-            border-radius: 40px;
+            border-radius: 44px;
             padding: 24px;
             text-align: center;
-            /* ДОДАНО: Багатошарова кольорова тінь та тонка обводка */
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            /* Складні тіні та світлий верхній бортик для об'єму */
+            border: 1px solid var(--glass-border);
+            border-top: 2px solid rgba(255, 255, 255, 0.9);
             box-shadow: 
-                0 30px 60px -10px rgba(255, 45, 85, 0.2), 
-                0 10px 20px -10px rgba(0,0,0,0.05),
-                inset 0 0 0 1px rgba(255, 255, 255, 0.2);
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+                0 30px 60px -12px rgba(255, 45, 85, 0.25), 
+                0 18px 36px -18px rgba(0, 0, 0, 0.3),
+                inset 0 2px 4px rgba(255,255,255,0.8);
+            /* Анімація появи картки */
+            animation: cardEntrance 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
         }
 
-        /* Контейнер фото з власною тінню */
+        /* Контейнер фото */
         .img-container {
             width: 100%;
-            border-radius: 32px;
+            border-radius: 34px;
             overflow: hidden;
             margin-bottom: 24px;
             background: #fff;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
-            transform: translateZ(0); /* Вмикає апаратне прискорення */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transform: translateZ(0);
+            /* Анімація появи фото (з затримкою) */
+            animation: popIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s backwards;
         }
 
         img {
             width: 100%;
-            height: 260px;
+            height: 270px;
             object-fit: cover;
             display: block;
         }
 
+        /* Текст */
         h1 {
             font-family: 'Pacifico', cursive;
             color: var(--accent);
-            font-size: 30px;
+            font-size: 32px;
             margin: 0 0 28px 0;
             line-height: 1.25;
-            text-shadow: 0 2px 4px rgba(255, 45, 85, 0.1);
+            text-shadow: 0 4px 10px rgba(255, 45, 85, 0.15);
+            /* Анімація появи тексту (ще більша затримка) */
+            animation: fadeUp 0.6s ease-out 0.5s backwards;
         }
 
+        /* Кнопки */
         .btn-wrap {
             display: flex;
-            gap: 12px;
+            gap: 14px;
+            /* Анімація появи кнопок */
+            animation: fadeUp 0.6s ease-out 0.7s backwards;
         }
 
         .btn {
             flex: 1;
-            padding: 18px 0;
+            padding: 20px 0;
             border: none;
-            border-radius: 22px;
-            font-size: 17px;
+            border-radius: 24px;
+            font-size: 18px;
             font-weight: 800;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+            /* Пружний перехід при натисканні */
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s;
             position: relative;
             overflow: hidden;
+            font-family: 'Inter', sans-serif;
         }
 
         #no {
-            background: rgba(0, 0, 0, 0.04);
+            background: rgba(255, 255, 255, 0.5);
             color: #666;
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
 
         #yes {
-            /* ДОДАНО: Градієнт для ефекту бліку */
-            background: linear-gradient(90deg, var(--accent), var(--accent-light), var(--accent));
-            background-size: 200% auto;
+            background: var(--accent-gradient);
             color: white;
-            box-shadow: 0 10px 25px -5px rgba(255, 45, 85, 0.4);
-            animation: shimmer 4s linear infinite;
+            box-shadow: 0 12px 30px -8px rgba(255, 45, 85, 0.5);
         }
         
-        /* Анімація бліку на кнопці */
-        @keyframes shimmer {
-            to { background-position: 200% center; }
+        /* Блік на кнопці ТАК */
+        #yes::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 3s infinite;
         }
 
+        /* Ефект натискання (пружина) */
         .btn:active {
-            transform: scale(0.94);
-            filter: brightness(0.9);
+            transform: scale(0.92);
+            filter: brightness(0.95);
+        }
+
+        /* --- АНІМАЦІЇ --- */
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: translateY(50px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes shimmer {
+            100% { left: 150%; }
+        }
+        @keyframes shakeHard {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-12px) rotate(-2deg); }
+            40% { transform: translateX(12px) rotate(2deg); }
+            60% { transform: translateX(-6px); }
+            80% { transform: translateX(6px); }
         }
 
         /* Фінальні сердечка */
-        .confetti-heart {
+        .super-heart {
             position: absolute;
             pointer-events: none;
             z-index: 100;
-            animation: popUp 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            filter: drop-shadow(0 4px 8px rgba(255, 45, 85, 0.3));
+            animation: superPop 2.5s cubic-bezier(0.15, 0.9, 0.35, 1) forwards;
         }
 
-        @keyframes popUp {
-            0% { transform: translateY(0) scale(0.5) rotateZ(0deg); opacity: 1; }
-            100% { transform: translateY(-120vh) scale(1.8) rotateZ(360deg); opacity: 0; }
+        @keyframes superPop {
+            0% { transform: translateY(0) scale(0.3) rotate(0deg); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(-130vh) scale(2.5) rotate(var(--r)); opacity: 0; }
         }
     </style>
 </head>
 <body>
+
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
 
     <div class="card" id="valentine-card">
         <div class="img-container">
@@ -181,66 +252,60 @@
         const urlNo = "https://i.ibb.co/TBMXnpRv/image.jpg";
         const urlYes = "https://i.ibb.co/397gn0RN/2.jpg";
 
-        // Функція вібрації (безпечна)
+        // Функція вібрації
         function vibrate(pattern) {
-            if (navigator.vibrate) {
-                navigator.vibrate(pattern);
-            }
+            if (navigator.vibrate) navigator.vibrate(pattern);
         }
 
         function handleNo() {
-            // Коротка вібрація помилки
-            vibrate(200);
+            vibrate([50, 30, 50, 30, 50]); // Різка вібрація помилки
 
             img.src = urlNo;
             txt.innerHTML = "Оні( 😭";
             txt.style.fontFamily = "'Inter', sans-serif";
             txt.style.fontWeight = "900";
             txt.style.color = "#333";
+            txt.style.fontSize = "36px"; // Робимо текст більшим
             
             noBtn.style.display = 'none';
             yesBtn.style.width = '100%';
-            yesBtn.innerHTML = 'Натиснути ТАК ✨';
+            yesBtn.style.background = '#333'; // Кнопка стає чорною
+            yesBtn.innerHTML = 'Виправити помилку 🥺';
             
-            // Анімація трясіння картки
-            card.animate([
-                { transform: 'translateX(0)' },
-                { transform: 'translateX(-10px)' },
-                { transform: 'translateX(10px)' },
-                { transform: 'translateX(-6px)' },
-                { transform: 'translateX(6px)' },
-                { transform: 'translateX(0)' }
-            ], { duration: 400 });
+            // Сильне трясіння картки
+            card.style.animation = "none";
+            setTimeout(() => {
+                 card.style.animation = "shakeHard 0.5s ease-in-out";
+            }, 10);
         }
 
         function handleYes() {
-            // Радісна ритмічна вібрація
-            vibrate([100, 50, 100, 50, 200]);
+            vibrate([80, 50, 80, 100, 200]); // Святкова вібрація
 
             img.src = urlYes;
             txt.innerHTML = "УРА! Перемога буде! 🥳";
             txt.style.fontFamily = "'Pacifico', cursive";
-            txt.style.color = "var(--accent)";
+            txt.style.color = var(--accent);
             
             document.getElementById('buttons').style.display = 'none';
             
-            // Запуск конфеті
-            for(let i=0; i<60; i++) {
-                setTimeout(launchConfetti, i * 40);
+            // Запуск супер-конфеті
+            for(let i=0; i<70; i++) {
+                setTimeout(launchSuperConfetti, i * 30);
             }
         }
 
-        function launchConfetti() {
+        function launchSuperConfetti() {
             const h = document.createElement('div');
-            h.className = 'confetti-heart';
-            h.innerHTML = ['❤️', '💖', '💝', '🌸', '✨'][Math.floor(Math.random() * 5)];
+            h.className = 'super-heart';
+            h.innerHTML = ['❤️', '💖', '💝', '🌸', '✨', '🎉'][Math.floor(Math.random() * 6)];
             h.style.left = Math.random() * 100 + 'vw';
-            h.style.top = '100vh';
-            h.style.fontSize = Math.random() * 25 + 15 + 'px';
-            // Випадковий нахил при старті
-            h.style.transform = `rotate(${Math.random() * 360}deg)`;
+            h.style.top = '105vh';
+            h.style.fontSize = Math.random() * 30 + 20 + 'px';
+            // Випадковий кут повороту для анімації
+            h.style.setProperty('--r', (Math.random() * 360 - 180) + 'deg');
             document.body.appendChild(h);
-            setTimeout(() => h.remove(), 3000);
+            setTimeout(() => h.remove(), 3500);
         }
     </script>
 </body>
